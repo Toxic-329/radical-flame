@@ -1,0 +1,54 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Neon glow effect -->
+    <filter id="neonGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="16" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Neon cyan gradient -->
+    <linearGradient id="neonCyan" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#a8ffff"/>
+      <stop offset="100%" stop-color="#00eaff"/>
+    </linearGradient>
+  </defs>
+
+  <g filter="url(#neonGlow)">
+    <!-- Head -->
+    <circle cx="256" cy="280" r="160" fill="url(#neonCyan)" />
+
+    <!-- Antenna stem -->
+    <line
+      x1="256" y1="120"
+      x2="300" y2="60"
+      stroke="url(#neonCyan)"
+      stroke-width="16"
+      stroke-linecap="round"
+    />
+
+    <!-- Antenna dot -->
+    <circle cx="320" cy="52" r="22" fill="url(#neonCyan)" />
+
+    <!-- Ears -->
+    <circle cx="96" cy="260" r="36" fill="url(#neonCyan)" />
+    <circle cx="416" cy="260" r="36" fill="url(#neonCyan)" />
+
+    <!-- Eyes -->
+    <circle cx="206" cy="270" r="22" fill="#ffffff"/>
+    <circle cx="306" cy="270" r="22" fill="#ffffff"/>
+
+    <!-- Smile -->
+    <path
+      d="M206 320
+         C236 350, 276 350, 306 320"
+      stroke="#ffffff"
+      stroke-width="14"
+      stroke-linecap="round"
+      fill="none"
+    />
+  </g>
+</svg>
+

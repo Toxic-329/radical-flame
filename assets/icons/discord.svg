@@ -1,0 +1,50 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Neon glow -->
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="14" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Cyan neon gradient -->
+    <linearGradient id="neonCyan" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#9fffff"/>
+      <stop offset="100%" stop-color="#00eaff"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Discord-style face -->
+  <g filter="url(#glow)">
+    <!-- Head -->
+    <path
+      d="M128 144
+         C128 96, 384 96, 384 144
+         V320
+         C384 352, 352 352, 336 336
+         L304 304
+         H208
+         L176 336
+         C160 352, 128 352, 128 320
+         Z"
+      fill="url(#neonCyan)"
+    />
+
+    <!-- Eyes -->
+    <circle cx="208" cy="224" r="28" fill="#ffffff"/>
+    <circle cx="304" cy="224" r="28" fill="#ffffff"/>
+
+    <!-- Smile -->
+    <path
+      d="M208 288
+         C240 304, 272 304, 304 288"
+      stroke="#ffffff"
+      stroke-width="14"
+      stroke-linecap="round"
+      fill="none"
+    />
+  </g>
+</svg>
+

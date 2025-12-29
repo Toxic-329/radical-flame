@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Radical Flame — Landing Page</title>
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script> tailwind.config = { darkMode: 'class' } </script>
+
+  <style>
+    .neon-text { text-shadow: 0 0 8px rgba(103,232,249,.9), 0 0 22px rgba(34,211,238,.6); }
+    .neon-border { box-shadow: 0 0 25px rgba(34,211,238,.25), inset 0 0 40px rgba(34,211,238,.08); }
+    .neon-icon {
+      filter: drop-shadow(0 0 6px rgba(34,211,238,.9)) drop-shadow(0 0 16px rgba(103,232,249,.7));
+      animation: breathe 5s ease-in-out infinite;
+      transition: transform .2s ease-out;
+    }
+    @keyframes breathe {
+      0%,100% { filter: drop-shadow(0 0 6px rgba(34,211,238,.4)); }
+      50% { filter: drop-shadow(0 0 22px rgba(103,232,249,.85)); }
+    }
+    .wave { animation: wave 6s ease-in-out infinite; }
+    @keyframes wave { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+    .neon-line {
+      width: 2px; height: 40px;
+      background: linear-gradient(180deg, transparent, rgba(34,211,238,.8), transparent);
+      filter: drop-shadow(0 0 10px rgba(103,232,249,.8));
+    }
+    .reveal { opacity: 0; transform: translateY(60px); transition: all 1600ms cubic-bezier(.2,.9,.2,1); }
+    .reveal-visible { opacity: 1; transform: translateY(0); }
+  </style>
+</head>
+
+<body class="transition-colors duration-500 overflow-x-hidden
+             bg-white text-slate-900
+             dark:bg-gradient-to-b dark:from-black dark:via-slate-900 dark:to-slate-800
+             dark:text-white">
+
+  <!-- Star canvas -->
+  <canvas id="stars" class="fixed inset-0 z-0 pointer-events-none"></canvas>
+
+  <!-- Theme toggle -->
+  <div class="fixed top-6 right-6 z-20">
+    <button id="themeToggle"
+      class="px-4 py-2 rounded-xl border border-white/10 bg-black/60 text-sm neon-border">Dark</button>
+  </div>
+
+  <div class="relative z-10 min-h-screen flex flex-col items-center py-16 px-6">
+
+    <!-- Hero -->
+    <header class="w-full max-w-3xl text-center">
+      <h1 class="text-6xl md:text-7xl font-extrabold mb-4 neon-text">HI!</h1>
+      <p class="text-xl md:text-2xl opacity-90">
+        I am <span class="font-semibold">RadicalFlame</span>
+        <span class="text-sm opacity-80">(AKA Toxic329)</span>
+      </p>
+
+      <!-- Socials -->
+      <div class="mt-10">
+        <p class="text-lg font-medium mb-6">Socials:</p>
+        <div class="flex flex-col items-center gap-10">
+
+          <!-- Instagram -->
+          <a href="https://www.instagram.com/flame_.radical/" target="_blank" rel="noreferrer"
+             class="flex items-center gap-4 px-5 py-3 rounded-2xl neon-border reveal hover:scale-[1.03] transition-transform">
+            <img src="./assets/icons/instagram.svg" alt="Instagram"
+                 class="w-9 h-9 neon-icon wave"
+                 onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden');" />
+            <span class="font-medium text-cyan-300 dark:text-cyan-200">@flame_.radical</span>
+          </a>
+
+          <div class="neon-line"></div>
+
+          <!-- Reddit -->
+          <a href="https://www.reddit.com/user/Toxic329/" target="_blank" rel="noreferrer"
+             class="flex items-center gap-4 px-5 py-3 rounded-2xl neon-border reveal hover:scale-[1.03] transition-transform">
+            <img src="./assets/icons/reddit.svg" alt="Reddit"
+                 class="w-9 h-9 neon-icon wave"
+                 onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden');" />
+            <span class="font-medium text-cyan-300 dark:text-cyan-200">u/Toxic329</span>
+          </a>
+
+          <div class="neon-line"></div>
+
+          <!-- Discord (static text, visible) -->
+          <div class="flex items-center gap-4 px-5 py-3 rounded-2xl neon-border">
+            <img src="./assets/icons/discord.svg" alt="Discord"
+                 class="w-9 h-9 neon-icon wave"
+                 onerror="this.style.display='none';" />
+            <span class="font-medium text-cyan-300 dark:text-cyan-200">Toxic329</span>
+          </div>
+
+        </div>
+      </div>
+    </header>
+
+    <div class="h-32"></div>
+
+    <!-- Infinite content -->
+    <main id="content" class="w-full max-w-3xl"></main>
+
+  </div>
+
+<script>
+/* ---------------- Theme ---------------- */
+const root = document.documentElement;
+const btn = document.getElementById("themeToggle");
+let theme = localStorage.getItem("rf_theme") || "dark";
+root.classList.toggle("dark", theme === "dark");
+btn.textContent = theme === "dark" ? "Dark" : "Light";
+
+btn.onclick = () => {
+  theme = theme === "dark" ? "light" : "dark";
+  root.classList.toggle("dark", theme === "dark");
+  btn.textContent = theme === "dark" ? "Dark" : "Light";
+  localStorage.setItem("rf_theme", theme);
+};
+
+/* ---------------- Stars ---------------- */
+const canvas = document.getElementById("stars");
+const ctx = canvas.getContext("2d");
+let w, h;
+const stars = Array.from({ length: 160 }, () => ({ x:0,y:0,r:0,v:0 }));
+
+function resize() {
+  w = canvas.width = window.innerWidth;
+  h = canvas.height = window.innerHeight;
+  stars.forEach(s=>{
+    s.x=Math.random()*w;
+    s.y=Math.random()*h;
+    s.r=Math.random()*1.4+.3;
+    s.v=Math.random()*.15+.05;
+  });
+}
+window.addEventListener("resize", resize);
+resize();
+
+(function animate(){
+  ctx.clearRect(0,0,w,h);
+  ctx.fillStyle="rgba(255,255,255,.85)";
+  stars.forEach(s=>{
+    s.y+=s.v;
+    if(s.y>h) s.y=0;
+    ctx.beginPath();
+    ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+    ctx.fill();
+  });
+  requestAnimationFrame(animate);
+})();
+
+/* ---------------- Reveal + Infinite scroll ---------------- */
+/* Create observer BEFORE adding blocks so socials and initial .reveal are observed */
+const observer = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting) e.target.classList.add("reveal-visible");
+  });
+}, {threshold: .35});
+
+function observeAllReveal(){
+  document.querySelectorAll('.reveal').forEach(el=>{
+    observer.observe(el);
+  });
+}
+
+/* add scroll blocks (does not call observe() itself) */
+const phrases = [
+  "Why are you still scrolling, there's nothing more to find here.",
+  "You can scroll forever, nothing else is here."
+];
+const container = document.getElementById("content");
+let count = 0;
+
+function addBlocks(n=4){
+  for(let i=0;i<n;i++){
+    const section=document.createElement("section");
+    section.className="min-h-screen mb-[120vh] flex items-center justify-center";
+    section.innerHTML=`
+      <div data-parallax class="p-12 rounded-3xl neon-border reveal text-center max-w-xl">
+        <p class="text-xl md:text-2xl font-medium">${phrases[count++%phrases.length]}</p>
+      </div>`;
+    container.appendChild(section);
+  }
+  // observe newly added reveals
+  observeAllReveal();
+}
+
+/* Observe initial .reveal (socials) right away */
+observeAllReveal();
+/* seed initial blocks and start infinite scroll */
+addBlocks(6);
+
+/* parallax and infinite append on scroll */
+window.addEventListener("scroll",()=>{
+  if(window.scrollY+innerHeight>document.body.scrollHeight-1200){
+    addBlocks();
+  }
+  document.querySelectorAll("[data-parallax]").forEach(el=>{
+    const r=el.getBoundingClientRect();
+    el.style.transform=`translateY(${r.top*.15}px)`;
+  });
+});
+</script>
+</body>
+</html>
+

@@ -1,0 +1,49 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Neon glow -->
+    <filter id="neonGlow" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="14" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Neon cyan gradient -->
+    <linearGradient id="neonCyan" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#9fffff"/>
+      <stop offset="100%" stop-color="#00eaff"/>
+    </linearGradient>
+  </defs>
+
+  <g filter="url(#neonGlow)" fill="none" stroke="url(#neonCyan)" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Outer rounded square -->
+    <rect
+      x="96"
+      y="96"
+      width="320"
+      height="320"
+      rx="72"
+      ry="72"
+      stroke-width="28"
+    />
+
+    <!-- Inner camera circle -->
+    <circle
+      cx="256"
+      cy="256"
+      r="92"
+      stroke-width="28"
+    />
+
+    <!-- Camera dot -->
+    <circle
+      cx="340"
+      cy="172"
+      r="18"
+      fill="url(#neonCyan)"
+      stroke="none"
+    />
+  </g>
+</svg>
+
